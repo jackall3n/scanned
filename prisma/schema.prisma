@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Code {
+  id        String    @id @default(cuid())
+  createdOn DateTime  @default(now())
+  updatedOn DateTime?
+
+  asset Asset?
+
+  @@map("code")
+}
+
+model Asset {
+  id        String    @id @default(cuid())
+  createdOn DateTime  @default(now())
+  updatedOn DateTime?
+
+  codeId String?
+  code   Code?   @relation(fields: [codeId], references: [id])
+
+  views Int @default(0)
+
+  links Link[]
+
+  @@map("asset")
+}
+
+model Link {
+  id        String    @id @default(cuid())
+  createdOn DateTime  @default(now())
+  updatedOn DateTime?
+
+  href String
+
+  assetId String
+  asset   Asset? @relation(fields: [assetId], references: [id])
+
+  @@map("link")
+}
