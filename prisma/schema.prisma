@@ -23,6 +23,9 @@ model Asset {
   createdOn DateTime  @default(now())
   updatedOn DateTime?
 
+  description String @default("")
+  reference String @default("")
+
   codeId String?
   code   Code?   @relation(fields: [codeId], references: [id])
 
